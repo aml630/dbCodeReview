@@ -2,8 +2,13 @@
 
 @foreach(var client in @Model["clientList"])
 {
-  <li>@client.GetName()</li>
-  <li>hey</li>
+  <li>@client.getName()  <a href = "/Stylist/@client.getID()/clients/edit">Edit</a> </li>
+  <form action='/Stylist/@Model["stylist"].GetId()/clients/deleted' method="post">
+  <input type="hidden" name="_method" value="DELETE">
+  <button type="submit">Delete</button>
+  </form>
+
+
 }
 
 

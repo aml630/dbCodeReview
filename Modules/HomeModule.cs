@@ -69,9 +69,30 @@ namespace SalonNamespace
         Client newClient = new Client(Request.Form["clientName"], id);
         newClient.Save();
         List<Stylist> AllStylists = Stylist.GetAll();
-
         return View["index.cshtml", AllStylists];
       };
+
+      Get["/Stylist/{id}/clients/edit"] =parameters=> {
+        Stylist selectedStylist = Stylist.Find(parameters.id);
+        return View["editClient.cshtml", selectedStylist];
+      };
+
+      Patch["/Stylist/{id}/clients/edited"] =parameters=> {
+        Client selectedClient = Client.Find(parameters.id);
+        selectedClient.UpdateName(Request.Form["clientEditName"]);
+        List<Stylist> AllStylists = Stylist.GetAll();
+        return View["index.cshtml", AllStylists];
+      };
+
+      Delete["/Stylist/{id}/clients/deleted"] = parameters => {
+        Client selectedClient = Client.Find(parameters.id);
+        selectedClient.Delete();
+        List<Stylist> AllStylists = Stylist.GetAll();
+        return View["index.cshtml", AllStylists];
+      };
+
+
+
 
     }
 

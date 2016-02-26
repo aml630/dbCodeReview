@@ -1,0 +1,8 @@
+
+  <h1>Edit Stylist: @Model.GetName()</h1>
+  <form action="/Stylist/@Model.GetId()/clients/edited" method="post">
+    <input type="hidden" name="_method" value="PATCH">
+    <input name="clientEditName" placeholder = "What should the clients new name be?" type="text">
+    <button type="submit">Submit</button>
+  </form>
+  <h4><a href="/">Return home</a></h4>
