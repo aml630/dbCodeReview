@@ -24,6 +24,19 @@ namespace SalonNamespace
         List<Stylist> AllStylists = Stylist.GetAll();
         return View["index.cshtml", AllStylists];
       };
+
+      Get["/Stylist/{id}/edit"] =parameters=> {
+        Stylist selectedStylist = Stylist.Find(parameters.id);
+        return View["editStylist.cshtml", selectedStylist];
+      };
+
+      Patch["/Stylist/Edited/{id}"] =parameters=> {
+        Stylist selectedStylist = Stylist.Find(parameters.id);
+        selectedStylist.Update(Request.Form["stylistEditName"]);
+        List<Stylist> AllStylists = Stylist.GetAll();
+        return View["index.cshtml", AllStylists];
+      };
+
     }
 
   }

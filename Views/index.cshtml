@@ -8,6 +8,6 @@
   {
     @foreach(var stylist in Model)
     {
-      <li><h2>@stylist.GetName() </h2><a href = "/edit">Edit</a> || <a href = "/delete">Delete</a></li>
+      <li><h2>@stylist.GetName() </h2><a href ="/Stylist/@stylist.GetId()/edit">Edit</a> || <a href = "/delete">Delete</a></li>
     }
   }
