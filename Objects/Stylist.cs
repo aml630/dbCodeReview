@@ -150,40 +150,38 @@ namespace SalonNamespace
       return foundStylist;
     }
 
-    // public List<Client> GetClients()
-    // {
-    //   SqlConnection conn = DB.Connection();
-    //   SqlDataReader rdr = null;
-    //   conn.Open();
-    //
-    //   SqlCommand cmd = new SqlCommand("SELECT * FROM restaurant WHERE cusine_id = @StylistId;", conn);
-    //   SqlParameter stylistsIdParameter = new SqlParameter();
-    //   stylistsIdParameter.ParameterName = "@StylistId";
-    //   stylistsIdParameter.Value = this.GetId();
-    //   cmd.Parameters.Add(stylistsIdParameter);
-    //   rdr = cmd.ExecuteReader();
-    //
-    //   List<Client> restaurants = new List<Client> {};
-    //   while(rdr.Read())
-    //   {
-    //     int restaurantId = rdr.GetInt32(0);
-    //     string name = rdr.GetString(1);
-    //     string address = rdr.GetString(2);
-    //     string phoneNumber = rdr.GetString(3);
-    //     int cusineId = rdr.GetInt32(4);
-    //     Client newClient = new Client(name, address, phoneNumber, cusineId, restaurantId);
-    //     restaurants.Add(newClient);
-    //   }
-    //   if (rdr != null)
-    //   {
-    //     rdr.Close();
-    //   }
-    //   if (conn != null)
-    //   {
-    //     conn.Close();
-    //   }
-    //   return restaurants;
-    // }
+    public List<Client> GetClients()
+    {
+      SqlConnection conn = DB.Connection();
+      SqlDataReader rdr = null;
+      conn.Open();
+
+      SqlCommand cmd = new SqlCommand("SELECT * FROM clients WHERE stylist_id = @StylistId;", conn);
+      SqlParameter stylistsIdParameter = new SqlParameter();
+      stylistsIdParameter.ParameterName = "@StylistId";
+      stylistsIdParameter.Value = this.GetId();
+      cmd.Parameters.Add(stylistsIdParameter);
+      rdr = cmd.ExecuteReader();
+
+      List<Client> clientList = new List<Client> {};
+      while(rdr.Read())
+      {
+        string name = rdr.GetString(0);
+        int stylistId = rdr.GetInt32(1);
+        int clientId = rdr.GetInt32(2);
+        Client newClient = new Client(name, stylistId, clientId);
+        clientList.Add(newClient);
+      }
+      if (rdr != null)
+      {
+        rdr.Close();
+      }
+      if (conn != null)
+      {
+        conn.Close();
+      }
+      return clientList;
+    }
 
     public void Update(string newName)
     {

@@ -41,7 +41,8 @@ namespace SalonNamespace
     public void Test_Save_SavesClientToDatabase()
     {
       //Arrange
-      Client testClient = new Client("jim", 4); testClient.Save();
+      Client testClient = new Client("jim", 4);
+      testClient.Save();
 
       //Act
       List<Client> result = Client.GetAll();
@@ -73,19 +74,10 @@ namespace SalonNamespace
     {
       //Arrange
       Client testClient = new Client("jim", 4);
-
       testClient.Save();
-
-      Console.WriteLine("testClient Name: " + testClient.GetName());
-      Console.WriteLine("testClient  Id : " + testClient.GetStylistId());
 
       //Act
       Client foundClient = Client.Find(testClient.GetId());
-
-      Console.WriteLine("testClient Name: " + testClient.GetName());
-      Console.WriteLine("testClient Id: " + testClient.GetStylistId());
-      Console.WriteLine("foundClient Name: " + foundClient.GetName());
-      Console.WriteLine("foundClient Id: " + foundClient.GetStylistId());
 
       //Assert
       Assert.Equal(testClient, foundClient);

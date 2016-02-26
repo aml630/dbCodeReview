@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Nancy;
+using System;
 using Nancy.ViewEngines.Razor;
 
 namespace SalonNamespace
@@ -41,6 +42,34 @@ namespace SalonNamespace
         Stylist selectedStylist = Stylist.Find(parameters.id);
         selectedStylist.Delete();
         List<Stylist> AllStylists = Stylist.GetAll();
+        return View["index.cshtml", AllStylists];
+      };
+
+      Get["/Stylist/{id}/clients"] = parameters => {
+        Dictionary<string, object> model = new Dictionary<string, object>();
+        Stylist selectedStylist = Stylist.Find(parameters.id);
+
+        var stylistClients = selectedStylist.GetClients();
+
+
+        model.Add("stylist", selectedStylist);
+        model.Add("clientList", stylistClients);
+
+        return View["clientList.cshtml", model];
+      };
+
+      Get["/Client/add/{id}"] = parameters => {
+        Stylist selectedStylist = Stylist.Find(parameters.id);
+        return View["createClient.cshtml", selectedStylist];
+      };
+
+      Post["/Client/new/{id}"] =parameters=> {
+        Stylist selectedStylist = Stylist.Find(parameters.id);
+        int id = selectedStylist.GetId();
+        Client newClient = new Client(Request.Form["clientName"], id);
+        newClient.Save();
+        List<Stylist> AllStylists = Stylist.GetAll();
+
         return View["index.cshtml", AllStylists];
       };
 

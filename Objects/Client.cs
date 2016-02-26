@@ -8,9 +8,9 @@ namespace SalonNamespace
   public class Client
   {
 
-    private int _id;
-    private int _stylist_id;
     private string _name;
+    private int _stylist_id;
+    private int _id;
 
     public Client(string Name, int StylistId, int Id = 0)
     {
@@ -30,7 +30,9 @@ namespace SalonNamespace
         Client newClient = (Client) otherClient;
         bool idEquality = this.GetId() == newClient.GetId();
         bool nameEquality = this.GetName() == newClient.GetName();
-        return (idEquality && nameEquality);
+        bool StylistIdEquality = this.GetStylistId() == newClient.GetStylistId();
+
+        return (idEquality && nameEquality && StylistIdEquality);
       }
   }
 
@@ -67,11 +69,13 @@ namespace SalonNamespace
       while(rdr.Read())
       {
         string clientsName = rdr.GetString(0);
-        int clientsId = rdr.GetInt32(1);
-        int stylistsId = rdr.GetInt32(1);
+
+        int Id = rdr.GetInt32(1);
+
+        int stylistsId = rdr.GetInt32(2);
 
 
-        Client newClient = new Client(clientsName, stylistsId, clientsId);
+        Client newClient = new Client(clientsName, stylistsId, Id);
         allClients.Add(newClient);
       }
 
@@ -93,12 +97,22 @@ namespace SalonNamespace
       SqlDataReader rdr;
       conn.Open();
 
-      SqlCommand cmd = new SqlCommand("INSERT INTO clients (name) OUTPUT INSERTED.id VALUES (@ClientName);", conn);
+      SqlCommand cmd = new SqlCommand("INSERT INTO clients (name, stylist_id) OUTPUT INSERTED.id VALUES (@ClientName, @StylistId);", conn);
 
       SqlParameter nameParameter = new SqlParameter();
       nameParameter.ParameterName = "@ClientName";
       nameParameter.Value = this.GetName();
+
+      SqlParameter IdParameter = new SqlParameter();
+      IdParameter.ParameterName = "@StylistId";
+      IdParameter.Value = this.GetId();
+
+
       cmd.Parameters.Add(nameParameter);
+      cmd.Parameters.Add(IdParameter);
+
+
+
       rdr = cmd.ExecuteReader();
 
       while(rdr.Read())
@@ -137,17 +151,17 @@ namespace SalonNamespace
       rdr = cmd.ExecuteReader();
 
       string foundClientName = null;
-      int foundClientId = 0;
+      int foundId = 0;
       int foundStylistId = 0;
 
       while(rdr.Read())
       {
         foundClientName = rdr.GetString(0);
-        foundClientId = rdr.GetInt32(1);
+        foundId = rdr.GetInt32(1);
         foundStylistId = rdr.GetInt32(2);
 
       }
-      Client foundClient = new Client(foundClientName, foundStylistId, foundClientId);
+      Client foundClient = new Client(foundClientName, foundStylistId, foundId);
 
       if (rdr != null)
       {
