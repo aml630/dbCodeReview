@@ -128,7 +128,7 @@ namespace SalonNamespace
 
     public void Dispose()
     {
-      Client.DeleteAll();
+      // Client.DeleteAll();
       Stylist.DeleteAll();
     }
   }

@@ -1,139 +1,243 @@
-using Xunit;
 using System.Collections.Generic;
-using System;
-using System.Data;
 using System.Data.SqlClient;
+using System;
 
-namespace RestaurantNamespace
+namespace SalonNamespace
 {
-  public class CuisineTest : IDisposable
+
+  public class Stylist
   {
-    public CuisineTest()
-    {
-      DBConfiguration.ConnectionString = "Data Source=(localdb)\\mssqllocaldb;Initial Catalog=restaurants_db_test;Integrated Security=SSPI;";
 
+    private int _id;
+    private string _name;
+
+    public Stylist(string Name, int Id = 0)
+    {
+      _id = Id;
+      _name = Name;
     }
 
-    [Fact]
-    public void Test_Cuisine_Empty()
-    {
-      //Arrange, Act
-      int result = Cuisine.GetAll().Count;
+    public override bool Equals(System.Object otherStylist)
+  {
+      if (!(otherStylist is Stylist))
+      {
+        return false;
+      }
+      else
+      {
+        Stylist newStylist = (Stylist) otherStylist;
+        bool idEquality = this.GetId() == newStylist.GetId();
+        bool nameEquality = this.GetName() == newStylist.GetName();
+        return (idEquality && nameEquality);
+      }
+  }
 
-      //Assert
-      Assert.Equal(0, result);
+    public int GetId()
+    {
+      return _id;
     }
 
-    [Fact]
-    public void Test_Equal_ReturnsTrueForSameName()
+    public string GetName()
     {
-      //Arrange, Act
-      Cuisine firstCuisine = new Cuisine("Italian");
-      Cuisine secondCuisine = new Cuisine("Italian");
-
-      //Assert
-      Assert.Equal(firstCuisine, secondCuisine);
+      return _name;
     }
 
-    [Fact]
-    public void Test_Save_SavesCuisineToDatabase()
+    public void SetName(string newName)
     {
-      //Arrange
-      Cuisine testCuisine = new Cuisine("Italian");
-      testCuisine.Save();
-
-      //Act
-      List<Cuisine> result = Cuisine.GetAll();
-      List<Cuisine> testList = new List<Cuisine>{testCuisine};
-
-      //Assert
-      Assert.Equal(testList, result);
+      _name = newName;
     }
 
-    [Fact]
-    public void Test_AssignsIdToCuisineObject()
+    public static List<Stylist> GetAll()
     {
-      //Arrange
-      Cuisine testCuisine = new Cuisine("Italian");
+      List<Stylist> allStylists = new List<Stylist>{};
 
-      testCuisine.Save();
+      SqlConnection conn = DB.Connection();
+      SqlDataReader rdr = null;
+      conn.Open();
 
-      //Act
-      Cuisine savedCuisine = Cuisine.GetAll()[0];
+      SqlCommand cmd = new SqlCommand("SELECT * FROM stylists;", conn);
+      rdr = cmd.ExecuteReader();
 
-      int result = savedCuisine.GetId();
-      int testId = testCuisine.GetId();
+      while(rdr.Read())
+      {
+        string stylistsName = rdr.GetString(0);
+        int stylistsId = rdr.GetInt32(1);
 
-      //Assert
-      Assert.Equal(testId, result);
+        Stylist newStylist = new Stylist(stylistsName, stylistsId);
+        allStylists.Add(newStylist);
+      }
+
+      if (rdr != null)
+      {
+        rdr.Close();
+      }
+      if (conn != null)
+      {
+        conn.Close();
+      }
+
+      return allStylists;
     }
 
-    [Fact]
-    public void Test_Find_FindsCuisineInDatabase()
+    public void Save()
     {
-      //Arrange
-      Cuisine testCuisine = new Cuisine("Italian");
-      testCuisine.Save();
+      SqlConnection conn = DB.Connection();
+      SqlDataReader rdr;
+      conn.Open();
 
-      //Act
-      Cuisine foundCuisine = Cuisine.Find(testCuisine.GetId());
+      SqlCommand cmd = new SqlCommand("INSERT INTO stylists (name) OUTPUT INSERTED.id VALUES (@StylistName);", conn);
 
-      //Assert
-      Assert.Equal(testCuisine, foundCuisine);
+      SqlParameter nameParameter = new SqlParameter();
+      nameParameter.ParameterName = "@StylistName";
+      nameParameter.Value = this.GetName();
+      cmd.Parameters.Add(nameParameter);
+      rdr = cmd.ExecuteReader();
+
+      while(rdr.Read())
+      {
+        this._id = rdr.GetInt32(0);
+      }
+      if (rdr != null)
+      {
+        rdr.Close();
+      }
+      if(conn != null)
+      {
+        conn.Close();
+      }
     }
 
-    [Fact]
-    public void Test_Update_UpdatesCuisineInDatabase()
+    public static void DeleteAll()
     {
-      //Arrange
-      string name = "Chinese";
-      Cuisine testCuisine = new Cuisine(name);
-      testCuisine.Save();
-      string newName = "Italian";
-
-      //Act
-      testCuisine.Update(newName);
-
-      string result = testCuisine.GetName();
-
-      //Assert
-      Assert.Equal(newName, result);
+      SqlConnection conn = DB.Connection();
+      conn.Open();
+      SqlCommand cmd = new SqlCommand("DELETE FROM stylists;", conn);
+      cmd.ExecuteNonQuery();
     }
 
-    [Fact]
-    public void Test_Delete_DeletesCuisineFromDatabase()
+    public static Stylist Find(int id)
     {
-      //Arrange
-      string name1 = "Thai";
-      Cuisine testCuisine1 = new Cuisine(name1);
-      testCuisine1.Save();
+      SqlConnection conn = DB.Connection();
+      SqlDataReader rdr = null;
+      conn.Open();
 
-      string name2 = "Italian";
-      Cuisine testCuisine2 = new Cuisine(name2);
-      testCuisine2.Save();
+      SqlCommand cmd = new SqlCommand("SELECT * FROM stylists WHERE id = @StylistId;", conn);
+      SqlParameter stylistsIdParameter = new SqlParameter();
+      stylistsIdParameter.ParameterName = "@StylistId";
+      stylistsIdParameter.Value = id.ToString();
+      cmd.Parameters.Add(stylistsIdParameter);
+      rdr = cmd.ExecuteReader();
 
-      Restaurant testRestaurants1 = new Restaurant("RedLobster", "happyStreet", "333444343", testCuisine1.GetId());
-      testRestaurants1.Save();
-      Restaurant testRestaurants2 = new Restaurant("GreenLobster", "happyStreet", "333444343", testCuisine2.GetId());
-      testRestaurants2.Save();
+      int foundStylistId = 0;
+      string foundStylistName = null;
 
-      //Act
-      testCuisine1.Delete();
-      List<Cuisine> resultCuisines = Cuisine.GetAll();
-      List<Cuisine> testCuisineList = new List<Cuisine> {testCuisine2};
+      while(rdr.Read())
+      {
+        foundStylistName = rdr.GetString(0);
+        foundStylistId = rdr.GetInt32(1);
 
-      List<Restaurant> resultRestaurantss = Restaurant.GetAll();
-      List<Restaurant> testRestaurantsList = new List<Restaurant> {testRestaurants2};
+      }
+      Stylist foundStylist = new Stylist(foundStylistName, foundStylistId);
 
-      //Assert
-      Assert.Equal(testCuisineList, resultCuisines);
-      Assert.Equal(testRestaurantsList, resultRestaurantss);
+      if (rdr != null)
+      {
+        rdr.Close();
+      }
+      if (conn != null)
+      {
+        conn.Close();
+      }
+      return foundStylist;
     }
 
-    public void Dispose()
+    // public List<Client> GetClients()
+    // {
+    //   SqlConnection conn = DB.Connection();
+    //   SqlDataReader rdr = null;
+    //   conn.Open();
+    //
+    //   SqlCommand cmd = new SqlCommand("SELECT * FROM restaurant WHERE cusine_id = @StylistId;", conn);
+    //   SqlParameter stylistsIdParameter = new SqlParameter();
+    //   stylistsIdParameter.ParameterName = "@StylistId";
+    //   stylistsIdParameter.Value = this.GetId();
+    //   cmd.Parameters.Add(stylistsIdParameter);
+    //   rdr = cmd.ExecuteReader();
+    //
+    //   List<Client> restaurants = new List<Client> {};
+    //   while(rdr.Read())
+    //   {
+    //     int restaurantId = rdr.GetInt32(0);
+    //     string name = rdr.GetString(1);
+    //     string address = rdr.GetString(2);
+    //     string phoneNumber = rdr.GetString(3);
+    //     int cusineId = rdr.GetInt32(4);
+    //     Client newClient = new Client(name, address, phoneNumber, cusineId, restaurantId);
+    //     restaurants.Add(newClient);
+    //   }
+    //   if (rdr != null)
+    //   {
+    //     rdr.Close();
+    //   }
+    //   if (conn != null)
+    //   {
+    //     conn.Close();
+    //   }
+    //   return restaurants;
+    // }
+
+    public void Update(string newName)
     {
-      Restaurant.DeleteAll();
-      Cuisine.DeleteAll();
+      SqlConnection conn = DB.Connection();
+      SqlDataReader rdr;
+      conn.Open();
+
+      SqlCommand cmd = new SqlCommand("UPDATE stylists SET name = @NewName OUTPUT INSERTED.name WHERE id = @StylistId;", conn);
+
+      SqlParameter newNameParameter = new SqlParameter();
+      newNameParameter.ParameterName = "@NewName";
+      newNameParameter.Value = newName;
+      cmd.Parameters.Add(newNameParameter);
+
+
+      SqlParameter stylistsIdParameter = new SqlParameter();
+      stylistsIdParameter.ParameterName = "@StylistId";
+      stylistsIdParameter.Value = this.GetId();
+      cmd.Parameters.Add(stylistsIdParameter);
+      rdr = cmd.ExecuteReader();
+
+      while(rdr.Read())
+      {
+        this._name = rdr.GetString(0);
+      }
+
+      if (rdr != null)
+      {
+        rdr.Close();
+      }
+
+      if (conn != null)
+      {
+        conn.Close();
+      }
+    }
+    public void Delete()
+    {
+      SqlConnection conn = DB.Connection();
+      conn.Open();
+
+      SqlCommand cmd = new SqlCommand("DELETE FROM stylists WHERE id = @StylistId; DELETE FROM restaurant WHERE cusine_id = @StylistId;", conn);
+
+      SqlParameter categoryIdParameter = new SqlParameter();
+      categoryIdParameter.ParameterName = "@StylistId";
+      categoryIdParameter.Value = this.GetId();
+
+      cmd.Parameters.Add(categoryIdParameter);
+      cmd.ExecuteNonQuery();
+
+      if (conn != null)
+      {
+        conn.Close();
+      }
     }
   }
 }
