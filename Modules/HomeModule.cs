@@ -37,6 +37,13 @@ namespace SalonNamespace
         return View["index.cshtml", AllStylists];
       };
 
+      Delete["/Stylist/{id}/delete"] = parameters => {
+        Stylist selectedStylist = Stylist.Find(parameters.id);
+        selectedStylist.Delete();
+        List<Stylist> AllStylists = Stylist.GetAll();
+        return View["index.cshtml", AllStylists];
+      };
+
     }
 
   }

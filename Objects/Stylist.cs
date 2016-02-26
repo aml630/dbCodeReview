@@ -225,7 +225,7 @@ namespace SalonNamespace
       SqlConnection conn = DB.Connection();
       conn.Open();
 
-      SqlCommand cmd = new SqlCommand("DELETE FROM stylists WHERE id = @StylistId; DELETE FROM restaurant WHERE cusine_id = @StylistId;", conn);
+      SqlCommand cmd = new SqlCommand("DELETE FROM stylists WHERE id = @StylistId", conn);
 
       SqlParameter categoryIdParameter = new SqlParameter();
       categoryIdParameter.ParameterName = "@StylistId";

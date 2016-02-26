@@ -2,12 +2,19 @@
 
 <p><a href="/stylist/new">Add A Stylist</a></p>
 
-
-
   @if(@Model.Count > 0)
   {
     @foreach(var stylist in Model)
     {
-      <li><h2>@stylist.GetName() </h2><a href ="/Stylist/@stylist.GetId()/edit">Edit</a> || <a href = "/delete">Delete</a></li>
+      <li><h2>@stylist.GetName() </h2><a href ="/Stylist/@stylist.GetId()/edit">Edit</a> ||
+
+
+        <form action="/Stylist/@stylist.GetId()/delete" method="post">
+        <input type="hidden" name="_method" value="DELETE">
+        <button type="submit">Delete</button>
+        </form>
+
+
+      </li>
     }
   }
