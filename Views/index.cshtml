@@ -1,6 +1,11 @@
-<h1>Home Page</h1>
 
-<p><a href="/stylist/new">Add A Stylist</a></p>
+<h1>Add A Stylist</h1>
+
+<form action = "/Stylist/new" method = "post">
+<input name = "stylistName" placeholder = "Stylist Name"></input>
+<button>Submit</button>
+</form>
+
 
   @if(@Model.Count > 0)
   {

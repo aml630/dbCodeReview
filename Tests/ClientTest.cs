@@ -80,14 +80,14 @@ namespace SalonNamespace
 
     public void Test_Update_UpdatesStylistInDatabase()
     {
-      string name1 = "Thai";
+      string name1 = "John";
       Stylist testStylist1 = new Stylist(name1);
       testStylist1.Save();
       //Arrange
-      string name = "RedLobster";
+      string name = "Jill";
       Client testClient = new Client(name, testStylist1.GetId());
       testClient.Save();
-      string newName = "GreenLobster";
+      string newName = "Jiimmy";
 
       //Act
       testClient.UpdateName(newName);
@@ -102,17 +102,17 @@ namespace SalonNamespace
     public void Test_Delete_DeletesClientFromDatabase()
     {
       //Arrange
-      string name1 = "Thai";
+      string name1 = "John";
       Stylist testStylist1 = new Stylist(name1);
       testStylist1.Save();
 
-      string name2 = "Italian";
+      string name2 = "Jill";
       Stylist testStylist2 = new Stylist(name2);
       testStylist2.Save();
 
-      Client testClients1 = new Client("RedLobster", testStylist1.GetId());
+      Client testClients1 = new Client("Client1", testStylist1.GetId());
       testClients1.Save();
-      Client testClients2 = new Client("GreenLobster", testStylist2.GetId());
+      Client testClients2 = new Client("Client2", testStylist2.GetId());
       testClients2.Save();
 
       //Act

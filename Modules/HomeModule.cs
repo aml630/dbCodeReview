@@ -48,13 +48,9 @@ namespace SalonNamespace
       Get["/Stylist/{id}/clients"] = parameters => {
         Dictionary<string, object> model = new Dictionary<string, object>();
         Stylist selectedStylist = Stylist.Find(parameters.id);
-
         var stylistClients = selectedStylist.GetClients();
-
-
         model.Add("stylist", selectedStylist);
         model.Add("clientList", stylistClients);
-
         return View["clientList.cshtml", model];
       };
 
@@ -73,8 +69,10 @@ namespace SalonNamespace
       };
 
       Get["/Stylist/{id}/clients/edit"] =parameters=> {
-        Stylist selectedStylist = Stylist.Find(parameters.id);
-        return View["editClient.cshtml", selectedStylist];
+        Client selectedClient = Client.Find(parameters.id);
+        Console.WriteLine("Selected client name" + selectedClient.getName());
+        Console.WriteLine("Selected client id " + selectedClient.getName());
+        return View["editClient.cshtml", selectedClient];
       };
 
       Patch["/Stylist/{id}/clients/edited"] =parameters=> {
@@ -90,12 +88,6 @@ namespace SalonNamespace
         List<Stylist> AllStylists = Stylist.GetAll();
         return View["index.cshtml", AllStylists];
       };
-
-
-
-
     }
-
   }
-
 }

@@ -1,15 +1,21 @@
 <h1>Client List</h1>
 
+<h1>Add A Stylist</h1>
+
+<form action = '/Client/new/@Model["stylist"].GetId()' method = "post">
+<input name = "clientName" placeholder = "Client Name"></input>
+<button>Submit Your Client</button>
+</form>
+
+
+
 @foreach(var client in @Model["clientList"])
 {
   <li>@client.getName()  <a href = "/Stylist/@client.getID()/clients/edit">Edit</a> </li>
-  <form action='/Stylist/@Model["stylist"].GetId()/clients/deleted' method="post">
+
+  <form action='/Stylist/@client.getID()/clients/deleted' method="post">
   <input type="hidden" name="_method" value="DELETE">
   <button type="submit">Delete</button>
   </form>
 
-
 }
-
-
-<a href ='/Client/add/@Model["stylist"].GetId()'>Add Client</a>

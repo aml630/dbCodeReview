@@ -101,7 +101,7 @@ namespace SalonNamespace
     SqlDataReader rdr = null;
     conn.Open();
     SqlCommand cmd = new SqlCommand("SELECT * FROM clients;", conn);
-          rdr = cmd.ExecuteReader();
+    rdr = cmd.ExecuteReader();
 
     while(rdr.Read())
     {
@@ -123,7 +123,6 @@ namespace SalonNamespace
 
     return allClients;
     }
-
 
 
     public static Client Find(int id)
@@ -150,7 +149,7 @@ namespace SalonNamespace
         foundStylistId = rdr.GetInt32(2);
 
       }
-      Client newClient = new Client(foundClientName, foundId, foundStylistId);
+      Client newClient = new Client(foundClientName, foundStylistId, foundId);
 
     if (rdr != null)
     {
@@ -182,6 +181,7 @@ namespace SalonNamespace
       clientsIdParameter.ParameterName = "@clientsId";
       clientsIdParameter.Value = this.getID();
       cmd.Parameters.Add(clientsIdParameter);
+
       rdr = cmd.ExecuteReader();
 
       while(rdr.Read())
@@ -207,11 +207,11 @@ namespace SalonNamespace
 
       SqlCommand cmd = new SqlCommand("DELETE FROM clients WHERE id = @clientsId;", conn);
 
-      SqlParameter categoryIdParameter = new SqlParameter();
-      categoryIdParameter.ParameterName = "@clientsId";
-      categoryIdParameter.Value = this.getID();
+      SqlParameter clientIdParameter = new SqlParameter();
+      clientIdParameter.ParameterName = "@clientsId";
+      clientIdParameter.Value = this.getID();
 
-      cmd.Parameters.Add(categoryIdParameter);
+      cmd.Parameters.Add(clientIdParameter);
       cmd.ExecuteNonQuery();
 
       if (conn != null)
