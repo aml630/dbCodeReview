@@ -38,13 +38,6 @@ namespace SalonNamespace
         return View["index.cshtml", AllStylists];
       };
 
-      Delete["/Stylist/{id}/delete"] = parameters => {
-        Stylist selectedStylist = Stylist.Find(parameters.id);
-        selectedStylist.Delete();
-        List<Stylist> AllStylists = Stylist.GetAll();
-        return View["index.cshtml", AllStylists];
-      };
-
       Get["/Stylist/{id}/clients"] = parameters => {
         Dictionary<string, object> model = new Dictionary<string, object>();
         Stylist selectedStylist = Stylist.Find(parameters.id);
@@ -70,8 +63,8 @@ namespace SalonNamespace
 
       Get["/Stylist/{id}/clients/edit"] =parameters=> {
         Client selectedClient = Client.Find(parameters.id);
-        Console.WriteLine("Selected client name" + selectedClient.getName());
-        Console.WriteLine("Selected client id " + selectedClient.getName());
+        Console.WriteLine("Selected client name: " + selectedClient);
+        Console.WriteLine("Selected client id:  " + selectedClient.getName());
         return View["editClient.cshtml", selectedClient];
       };
 
@@ -85,6 +78,13 @@ namespace SalonNamespace
       Delete["/Stylist/{id}/clients/deleted"] = parameters => {
         Client selectedClient = Client.Find(parameters.id);
         selectedClient.Delete();
+        List<Stylist> AllStylists = Stylist.GetAll();
+        return View["index.cshtml", AllStylists];
+      };
+
+      Delete["/Stylist/{id}/delete"] = parameters => {
+        Stylist selectedStylist = Stylist.Find(parameters.id);
+        selectedStylist.Delete();
         List<Stylist> AllStylists = Stylist.GetAll();
         return View["index.cshtml", AllStylists];
       };

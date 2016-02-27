@@ -18,7 +18,7 @@ namespace SalonNamespace
     }
 
     public override bool Equals(System.Object otherStylist)
-  {
+    {
       if (!(otherStylist is Stylist))
       {
         return false;
@@ -30,7 +30,7 @@ namespace SalonNamespace
         bool nameEquality = this.GetName() == newStylist.GetName();
         return (idEquality && nameEquality);
       }
-  }
+    }
 
     public int GetId()
     {
