@@ -11,13 +11,15 @@
 
 @foreach(var client in @Model["clientList"])
 {
-  <li>@client.getName()  <a href = "/Stylist/@client.getID()/clients/edit">Edit</a> </li>
+  <li>@client.getName()  <a href = "/Stylist/@client.getStylistId()/clients/edit">Edit</a> </li>
 
-  <form action='/Stylist/@client.getID()/clients/deleted' method="post">
+  <form action='/Stylist/@client.getStylistId()/clients/deleted' method="post">
   <input type="hidden" name="_method" value="DELETE">
   <button type="submit">Delete</button>
   </form>
   <li>@client.getID()</li>
+  <li>@client.getStylistId()</li>
+
 
 
 

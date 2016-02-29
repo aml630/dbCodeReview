@@ -88,7 +88,7 @@ namespace SalonNamespace
     return _name;
   }
 
-  private int getStylistId()
+  public int getStylistId()
   {
     return _stylist_id;
   }
