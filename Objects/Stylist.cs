@@ -169,7 +169,7 @@ namespace SalonNamespace
         string name = rdr.GetString(0);
         int stylistId = rdr.GetInt32(1);
         int clientId = rdr.GetInt32(2);
-        Client newClient = new Client(name, stylistId, clientId);
+        Client newClient = new Client(name, clientId, stylistId);
         clientList.Add(newClient);
       }
       if (rdr != null)
