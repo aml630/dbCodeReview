@@ -26,9 +26,9 @@ namespace SalonNamespace
     else
     {
       Client newClient = (Client) otherClient;
-      bool idEquality = this.getID() == newClient.getID();
-      bool nameEquality = this.getName() == newClient.getName();
-      bool stylistIdEquality = this.getStylistId() == newClient.getStylistId();
+      bool idEquality = this.GetID() == newClient.GetID();
+      bool nameEquality = this.GetName() == newClient.GetName();
+      bool stylistIdEquality = this.GetStylistId() == newClient.GetStylistId();
 
       return (idEquality && nameEquality && stylistIdEquality);
     }
@@ -45,11 +45,11 @@ namespace SalonNamespace
 
     SqlParameter nameParameter = new SqlParameter();
     nameParameter.ParameterName = "@ClientName";
-    nameParameter.Value = this.getName();
+    nameParameter.Value = this.GetName();
 
     SqlParameter stylistParameter = new SqlParameter();
     stylistParameter.ParameterName = "@StylistId";
-    stylistParameter.Value = this.getStylistId();
+    stylistParameter.Value = this.GetStylistId();
 
     cmd.Parameters.Add(nameParameter);
     cmd.Parameters.Add(stylistParameter);
@@ -78,17 +78,17 @@ namespace SalonNamespace
     cmd.ExecuteNonQuery();
   }
 
-  public int getID()
+  public int GetID()
   {
     return _id;
   }
 
-  public string getName()
+  public string GetName()
   {
     return _name;
   }
 
-  public int getStylistId()
+  public int GetStylistId()
   {
     return _stylist_id;
   }
@@ -179,7 +179,7 @@ namespace SalonNamespace
 
       SqlParameter clientsIdParameter = new SqlParameter();
       clientsIdParameter.ParameterName = "@clientsId";
-      clientsIdParameter.Value = this.getID();
+      clientsIdParameter.Value = this.GetID();
       cmd.Parameters.Add(clientsIdParameter);
 
       rdr = cmd.ExecuteReader();
@@ -209,7 +209,7 @@ namespace SalonNamespace
 
       SqlParameter clientIdParameter = new SqlParameter();
       clientIdParameter.ParameterName = "@clientsId";
-      clientIdParameter.Value = this.getID();
+      clientIdParameter.Value = this.GetID();
 
       cmd.Parameters.Add(clientIdParameter);
       cmd.ExecuteNonQuery();

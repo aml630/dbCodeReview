@@ -17,6 +17,8 @@ namespace SalonNamespace
     public void Test_DatabaseEmptyAtFirst()
     {
       //Arrange, Act
+      Client.DeleteAll();
+
       int result = Client.GetAll().Count;
 
       //Assert
@@ -56,8 +58,8 @@ namespace SalonNamespace
       client.Save();
       Client savedClient = Client.GetAll()[0];
 
-      int testID = client.getID();
-      int result = savedClient.getID();
+      int testID = client.GetID();
+      int result = savedClient.GetID();
 
       //Assert
       Assert.Equal(testID, result);
@@ -70,7 +72,7 @@ namespace SalonNamespace
       testClient.Save();
 
       //Act
-      Client foundClient = Client.Find(testClient.getID());
+      Client foundClient = Client.Find(testClient.GetID());
 
       //Assert
       Assert.Equal(testClient, foundClient);
@@ -85,14 +87,14 @@ namespace SalonNamespace
       testStylist1.Save();
       //Arrange
       string name = "Jill";
-      Client testClient = new Client(name, testStylist1.GetId());
+      Client testClient = new Client(name, testStylist1.GetID());
       testClient.Save();
       string newName = "Jiimmy";
 
       //Act
       testClient.UpdateName(newName);
 
-      string result = testClient.getName();
+      string result = testClient.GetName();
 
       //Assert
       Assert.Equal(newName, result);
@@ -110,9 +112,9 @@ namespace SalonNamespace
       Stylist testStylist2 = new Stylist(name2);
       testStylist2.Save();
 
-      Client testClients1 = new Client("Client1", testStylist1.GetId());
+      Client testClients1 = new Client("Client1", testStylist1.GetID());
       testClients1.Save();
-      Client testClients2 = new Client("Client2", testStylist2.GetId());
+      Client testClients2 = new Client("Client2", testStylist2.GetID());
       testClients2.Save();
 
       //Act

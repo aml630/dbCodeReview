@@ -26,13 +26,13 @@ namespace SalonNamespace
       else
       {
         Stylist newStylist = (Stylist) otherStylist;
-        bool idEquality = this.GetId() == newStylist.GetId();
+        bool idEquality = this.GetID() == newStylist.GetID();
         bool nameEquality = this.GetName() == newStylist.GetName();
         return (idEquality && nameEquality);
       }
     }
 
-    public int GetId()
+    public int GetID()
     {
       return _id;
     }
@@ -159,7 +159,7 @@ namespace SalonNamespace
       SqlCommand cmd = new SqlCommand("SELECT * FROM clients WHERE stylist_id = @StylistId;", conn);
       SqlParameter stylistsIdParameter = new SqlParameter();
       stylistsIdParameter.ParameterName = "@StylistId";
-      stylistsIdParameter.Value = this.GetId();
+      stylistsIdParameter.Value = this.GetID();
       cmd.Parameters.Add(stylistsIdParameter);
       rdr = cmd.ExecuteReader();
 
@@ -199,7 +199,7 @@ namespace SalonNamespace
 
       SqlParameter stylistsIdParameter = new SqlParameter();
       stylistsIdParameter.ParameterName = "@StylistId";
-      stylistsIdParameter.Value = this.GetId();
+      stylistsIdParameter.Value = this.GetID();
       cmd.Parameters.Add(stylistsIdParameter);
       rdr = cmd.ExecuteReader();
 
@@ -227,7 +227,7 @@ namespace SalonNamespace
 
       SqlParameter stylistIdParameter = new SqlParameter();
       stylistIdParameter.ParameterName = "@StylistId";
-      stylistIdParameter.Value = this.GetId();
+      stylistIdParameter.Value = this.GetID();
 
       cmd.Parameters.Add(stylistIdParameter);
       cmd.ExecuteNonQuery();

@@ -50,6 +50,21 @@ namespace SalonNamespace
     }
 
     [Fact]
+    public void Test_GetClients()
+    {
+      //Arrange
+      Stylist testStylist = new Stylist("John"); testStylist.Save();
+      Client testClient = new Client("Client", testStylist.GetID()); testClient.Save();
+      //Act
+      List<Client> result = testStylist.GetClients();
+      List<Client> testList = new List<Client>{testClient};
+
+      //Assert
+      Assert.Equal(testList, result);
+    }
+
+
+    [Fact]
     public void Test_AssignsIdToStylistObject()
     {
       //Arrange
@@ -59,8 +74,8 @@ namespace SalonNamespace
       //Act
       Stylist savedStylist = Stylist.GetAll()[0];
 
-      int result = savedStylist.GetId();
-      int testId = testStylist.GetId();
+      int result = savedStylist.GetID();
+      int testId = testStylist.GetID();
 
       //Assert
       Assert.Equal(testId, result);
@@ -73,7 +88,7 @@ namespace SalonNamespace
       Stylist testStylist = new Stylist("John"); testStylist.Save();
 
       //Act
-      Stylist foundStylist = Stylist.Find(testStylist.GetId());
+      Stylist foundStylist = Stylist.Find(testStylist.GetID());
 
       //Assert
       Assert.Equal(testStylist, foundStylist);

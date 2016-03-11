@@ -54,7 +54,7 @@ namespace SalonNamespace
 
       Post["/Client/new/{id}"] =parameters=> {
         Stylist selectedStylist = Stylist.Find(parameters.id);
-        int id = selectedStylist.GetId();
+        int id = selectedStylist.GetID();
         Client newClient = new Client(Request.Form["clientName"], id);
         newClient.Save();
         List<Stylist> AllStylists = Stylist.GetAll();
@@ -64,7 +64,7 @@ namespace SalonNamespace
       Get["/Stylist/{id}/clients/edit"] =parameters=> {
         Client selectedClient = Client.Find(parameters.id);
         Console.WriteLine("Selected client name: " + selectedClient);
-        Console.WriteLine("Selected client id:  " + selectedClient.getName());
+        Console.WriteLine("Selected client id:  " + selectedClient.GetName());
         return View["editClient.cshtml", selectedClient];
       };
 

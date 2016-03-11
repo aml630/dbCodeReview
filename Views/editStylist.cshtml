@@ -1,8 +1,8 @@
 
   <h1>Edit Stylist: @Model.GetName()</h1>
-  <form action="/Stylist/Edited/@Model.GetId()" method="post">
+  <form action="/Stylist/Edited/@Model.GetID()" method="post">
     <input type="hidden" name="_method" value="PATCH">
-    <input name="cuisine-id" type="hidden" value="@Model.GetId()">
+    <input name="cuisine-id" type="hidden" value="@Model.GetID()">
     <input name="stylistEditName" placeholder = "What should the stylists new name be?" type="text">
     <button type="submit">Submit</button>
   </form>
